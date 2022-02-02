@@ -1,3 +1,4 @@
+//go:build !linux
 // +build !linux
 
 package tfexec
@@ -17,7 +18,7 @@ func (tf *Terraform) runTerraformCmd(ctx context.Context, cmd *exec.Cmd) error {
 	go func() {
 		<-ctx.Done()
 		if ctx.Err() == context.DeadlineExceeded || ctx.Err() == context.Canceled {
-			if cmd != nil && cmd.Process != nil && cmd.ProcessState != nil {
+			if cmd != nil && cmd.Process != nil {
 				err := cmd.Process.Kill()
 				if err != nil {
 					tf.logger.Printf("error from kill: %s", err)
